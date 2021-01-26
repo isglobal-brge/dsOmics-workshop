@@ -198,7 +198,7 @@ download.file("https://github.com/isglobal-brge/dsOmicsClient/raw/master/vignett
 # Real application: Epigenomic changes and green spaces
 
 ```{r setup_cache, include=FALSE, purl=FALSE}
-knitr::opts_chunk$set(cache.path = 'dsOmics_greenspace_cache/')
+knitr::opts_chunk$set(cache.path = 'dsOmics_greenspace_cache/', cache=FALSE)
 ```
 
 Our main aim is to train ATHLETE researchers to perform omic data analysis linking the epigenome with the exposome. WP3 and WP4 have setup a project (`GREENSPACE`) that will be used as proof-of-concept of our developed infrastructure. This figure summarized that project
@@ -347,7 +347,7 @@ ds.nSamples('methy2')
 Now, we are ready to perform the required EXWAS by
 
 ```{r exwas}
-ewas <- ds.limma(model = ~ h_greenyn300_preg_None,
+ewas <- ds.limma(model = ~ greenyn300_0,
                       Set = "methy2")
 ```
 
@@ -365,7 +365,7 @@ metaPvalues(ewas)
 ```
 
 
-We can also run analyses adjusted for cell types if metadata is available in the `ExpressionSet`
+We can also run analyses adjusted for other covariates or even for cell types if metadata is available in the `ExpressionSet`
 
 
 ```{r}
@@ -373,7 +373,12 @@ ds.fvarLabels('methy2')
 ```
 
 
+For example, let us run the analysis adjusted for gender
 
+```{r exwasadj}
+ewas.adj <- ds.limma(model = ~ greenyn300_0 + sex_methyl, Set = "methy2")
+metaPvalues(ewas.adj)
+```
 
 Do not forget to logout the connection
 
