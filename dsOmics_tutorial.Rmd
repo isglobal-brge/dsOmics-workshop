@@ -167,6 +167,29 @@ download.file("https://github.com/isglobal-brge/dsOmicsClient/raw/master/vignett
 ```
 
 
+## Exercise 1
+
+> He have collected information on methylation data (200 more variable CpGs) in order to compare methylation patterns in inner-city children with persistent atopic asthma (n=97) versus healthy controls (n=97). The authors used DNA from peripheral blood mononuclear cells (PBMCs) from inner city children aged 6-12 years with persistent atopic asthma children and healthy controls. Comparing asthmatics (N=97) to controls (N=97). Original data are available at GEO under the accession number [GSE40732](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE40732). The `ExpressionSet` with 194 samples is available  at: 
+>
+> - https://github.com/isglobal-brge/brgedata/raw/master/data/GSE40732.Rdata
+>
+> This data can be use later to check that DataSHIELD (using `dsOmics`) is providing the same results as if we had the whole data in a single computer
+>
+> We have split this data set in two and have created two resources in the Opal demo site (https://opal-demo.obiba.org/) that can be access through DataSHIELD using the credentials:
+>
+>     - user: dsuser
+>     - password: password
+>
+> The two resources are in the project called `workshop` and their names are `GSE40732_1` and `GSE40732_2`
+>
+> 1. Login the connection to the two resources to DataSHIELD.
+> 2. Assign the resources to an R object called 'methy'.
+> 3. Use `ds.nFeatures ()` and `ds.nSamples ()` functions to verify that the loaded objects are having the proper dimensions.
+> 4. Get the names of the variables available in the sample metadata (use `ds.varLabels ()`).
+> 5. Get the distribution of samples in the variable `asthma` (cases/controls).
+> 6. Perform an EWAS considering `asthma` as the condition (e.g. grouping variable).
+> 7. Do a simple meta-analysis using `metaPvalues ()` function.
+
 ## Genome-wide association analyses (GWAS)
 
 Genomic data can be stored in different formats. [VCF](https://www.internationalgenome.org/wiki/Analysis/vcf4.0/) and [PLINK](http://zzz.bwh.harvard.edu/plink/) files are commonly used in genetic epidemiology studies. We have a GWAS example available at [BRGE data repository](https://github.com/isglobal-brge/brgedata) that aims to find SNPs associated with asthma. We have data stored in VCF (brge.vcf) with several covariates and phenotypes available in the file brge.txt (gender, age, obesity, smoking, country and asthma status). The same data is also available in PLINK format (brge.bed, brge.bim, brge.fam) with covariates in the file brge.phe.
@@ -386,7 +409,12 @@ Do not forget to logout the connection
 ```{r logoutexwas}
 datashield.logout(conns)    
 ```
-  
+
+## Exercise 2
+
+> Peform an EWAS using the same data that is available in the GREENSPACE project to determine which CpGs are differentially methylated for the exposures: `greenyn300_4`, `ndvi100_0` and `ndvi100_4`.
+
+> EWAS requires to adjust the analyses for [cell type composition](https://www.futuremedicine.com/doi/full/10.2217/epi-2016-0153). The `ExpressionSet` contains the variables Bcell, CD4T, CD8T, Gran, Mono and NK in the sample metadata. Re-run the models adjustin for those variables 
 
 
 

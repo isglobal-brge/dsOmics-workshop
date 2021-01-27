@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2021-01-26" />
+<meta name="date" content="2021-01-27" />
 
 <title>Tutorial: Omics data analysis with DataSHIELD</title>
 
@@ -731,7 +731,7 @@ function toggle_visibility(id1) {
 <p class="author-name">Juan R. Gonzalez<span class="affil-mark">1*</span></p>
 <p class="author-affiliation"><span class="affil-mark">1</span>Bioinformatics Research Group in Epidemiolgy (BRGE), Barcelona Insitute for Global Health (ISGlobal)</p>
 <p class="author-email"><span class="affil-mark">*</span><a href="mailto:juanr.gonzalez@isglobal.org">juanr.gonzalez@isglobal.org</a></p>
-<h4 class="date">2021-01-26</h4>
+<h4 class="date">2021-01-27</h4>
 
 </div>
 
@@ -749,13 +749,17 @@ function toggle_visibility(id1) {
 <li><a href="#multiple-cpg-analysis"><span class="toc-section-number">3.2.2</span> Multiple CpG analysis</a></li>
 <li><a href="#adjusting-for-surrogate-variables"><span class="toc-section-number">3.2.3</span> Adjusting for Surrogate Variables</a></li>
 </ul></li>
-<li><a href="#genome-wide-association-analyses-gwas"><span class="toc-section-number">3.3</span> Genome-wide association analyses (GWAS)</a>
+<li><a href="#exercise-1"><span class="toc-section-number">3.3</span> Exercise 1</a></li>
+<li><a href="#genome-wide-association-analyses-gwas"><span class="toc-section-number">3.4</span> Genome-wide association analyses (GWAS)</a>
 <ul>
-<li><a href="#gwasBioc"><span class="toc-section-number">3.3.1</span> GWAS with Bioconductor</a></li>
-<li><a href="#gwas-with-plink"><span class="toc-section-number">3.3.2</span> GWAS with PLINK</a></li>
+<li><a href="#gwasBioc"><span class="toc-section-number">3.4.1</span> GWAS with Bioconductor</a></li>
+<li><a href="#gwas-with-plink"><span class="toc-section-number">3.4.2</span> GWAS with PLINK</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#real-application-epigenomic-changes-and-green-spaces"><span class="toc-section-number">4</span> Real application: Epigenomic changes and green spaces</a></li>
+<li><a href="#real-application-epigenomic-changes-and-green-spaces"><span class="toc-section-number">4</span> Real application: Epigenomic changes and green spaces</a>
+<ul>
+<li><a href="#exercise-2"><span class="toc-section-number">4.1</span> Exercise 2</a></li>
+</ul></li>
 <li><a href="#session-info"><span class="toc-section-number">5</span> Session Info</a></li>
 </ul>
 </div>
@@ -1257,12 +1261,35 @@ ans.meta.sv</code></pre>
 <pre class="r"><code>datashield.logout(conns)</code></pre>
 </div>
 </div>
-<div id="genome-wide-association-analyses-gwas" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span> Genome-wide association analyses (GWAS)</h2>
+<div id="exercise-1" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Exercise 1</h2>
+<blockquote>
+<p>He have collected information on methylation data (200 more variable CpGs) in order to compare methylation patterns in inner-city children with persistent atopic asthma (n=97) versus healthy controls (n=97). The authors used DNA from peripheral blood mononuclear cells (PBMCs) from inner city children aged 6-12 years with persistent atopic asthma children and healthy controls. Comparing asthmatics (N=97) to controls (N=97). Original data are available at GEO under the accession number <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE40732">GSE40732</a>. The <code>ExpressionSet</code> with 194 samples is available at:</p>
+<ul>
+<li><a href="https://github.com/isglobal-brge/brgedata/raw/master/data/GSE40732.Rdata" class="uri">https://github.com/isglobal-brge/brgedata/raw/master/data/GSE40732.Rdata</a></li>
+</ul>
+<p>This data can be use later to check that DataSHIELD (using <code>dsOmics</code>) is providing the same results as if we had the whole data in a single computer</p>
+<p>We have split this data set in two and have created two resources in the Opal demo site (<a href="https://opal-demo.obiba.org/" class="uri">https://opal-demo.obiba.org/</a>) that can be access through DataSHIELD using the credentials:</p>
+<pre><code>- user: dsuser
+- password: password</code></pre>
+<p>The two resources are in the project called <code>workshop</code> and their names are <code>GSE40732_1</code> and <code>GSE40732_2</code></p>
+<ol style="list-style-type: decimal">
+<li>Login the connection to the two resources to DataSHIELD.</li>
+<li>Assign the resources to an R object called ‘methy’.</li>
+<li>Use <code>ds.nFeatures ()</code> and <code>ds.nSamples ()</code> functions to verify that the loaded objects are having the proper dimensions.</li>
+<li>Get the names of the variables available in the sample metadata (use <code>ds.varLabels ()</code>).</li>
+<li>Get the distribution of samples in the variable <code>asthma</code> (cases/controls).</li>
+<li>Perform an EWAS considering <code>asthma</code> as the condition (e.g. grouping variable).</li>
+<li>Do a simple meta-analysis using <code>metaPvalues ()</code> function.</li>
+</ol>
+</blockquote>
+</div>
+<div id="genome-wide-association-analyses-gwas" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Genome-wide association analyses (GWAS)</h2>
 <p>Genomic data can be stored in different formats. <a href="https://www.internationalgenome.org/wiki/Analysis/vcf4.0/">VCF</a> and <a href="http://zzz.bwh.harvard.edu/plink/">PLINK</a> files are commonly used in genetic epidemiology studies. We have a GWAS example available at <a href="https://github.com/isglobal-brge/brgedata">BRGE data repository</a> that aims to find SNPs associated with asthma. We have data stored in VCF (brge.vcf) with several covariates and phenotypes available in the file brge.txt (gender, age, obesity, smoking, country and asthma status). The same data is also available in PLINK format (brge.bed, brge.bim, brge.fam) with covariates in the file brge.phe.</p>
 <p>Here we illustrate how to perform GWAS using R and Bioconductor packages or PLINK shell command line.</p>
-<div id="gwasBioc" class="section level3" number="3.3.1">
-<h3><span class="header-section-number">3.3.1</span> GWAS with Bioconductor</h3>
+<div id="gwasBioc" class="section level3" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> GWAS with Bioconductor</h3>
 <p>We have created a resource having the VCF file of our study on asthma as previously described. The name of the resource is <code>brge_vcf</code> the phenotypes are available in another resource called <code>brge</code> that is a .txt file. The GWAS analysis is then perform as follows</p>
 <p>We first start by preparing login data</p>
 <pre class="r"><code>builder &lt;- newDSLoginBuilder()
@@ -1407,8 +1434,8 @@ attr(,&quot;class&quot;)
 <p>This close the DataSHIELD session</p>
 <pre class="r"><code>datashield.logout(conns)</code></pre>
 </div>
-<div id="gwas-with-plink" class="section level3" number="3.3.2">
-<h3><span class="header-section-number">3.3.2</span> GWAS with PLINK</h3>
+<div id="gwas-with-plink" class="section level3" number="3.4.2">
+<h3><span class="header-section-number">3.4.2</span> GWAS with PLINK</h3>
 <p>Here we illustrate how to perform the same GWAS analyses on the asthma using PLINK secure shell commands. This can be performed thanks to the posibility of having ssh resources as described <a href="#shell_extension">here</a>.</p>
 <p>It is worth to notice that this workflow and the new R functions implemented in <em><a href="https://github.com/isglobal-brge/dsOmicsClient">dsOmicsClient</a></em> could be used as a guideline to carry out similar analyses using existing analysis tools in genomics such as IMPUTE, SAMtools or BEDtools among many others.</p>
 <p>We start by assigning login resources</p>
@@ -1946,6 +1973,15 @@ metaPvalues(ewas.adj)</code></pre>
 # ... with 90 more rows</code></pre>
 <p>Do not forget to logout the connection</p>
 <pre class="r"><code>datashield.logout(conns)    </code></pre>
+<div id="exercise-2" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Exercise 2</h2>
+<blockquote>
+<p>Peform an EWAS using the same data that is available in the GREENSPACE project to determine which CpGs are differentially methylated for the exposures: <code>greenyn300_4</code>, <code>ndvi100_0</code> and <code>ndvi100_4</code>.</p>
+</blockquote>
+<blockquote>
+<p>EWAS requires to adjust the analyses for <a href="https://www.futuremedicine.com/doi/full/10.2217/epi-2016-0153">cell type composition</a>. The <code>ExpressionSet</code> contains the variables Bcell, CD4T, CD8T, Gran, Mono and NK in the sample metadata. Re-run the models adjustin for those variables</p>
+</blockquote>
+</div>
 </div>
 <div id="session-info" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Session Info</h1>
@@ -1966,34 +2002,33 @@ attached base packages:
 other attached packages:
  [1] forcats_0.5.0       stringr_1.4.0       dplyr_1.0.2         purrr_0.3.4        
  [5] readr_1.3.1         tidyr_1.1.2         tibble_3.0.3        ggplot2_3.3.2      
- [9] tidyverse_1.3.0     dsOmicsClient_1.1.0 dsBaseClient_6.1.0  knitr_1.29         
-[13] BiocStyle_2.16.0    Biobase_2.48.0      BiocGenerics_0.34.0 DSOpal_1.1.0       
-[17] DSI_1.1.0           R6_2.4.1            progress_1.2.2      opalr_1.5.1        
-[21] httr_1.4.2         
+ [9] tidyverse_1.3.0     dsOmicsClient_1.1.0 dsBaseClient_6.1.0  Biobase_2.48.0     
+[13] BiocGenerics_0.34.0 DSOpal_1.1.0        DSI_1.1.0           R6_2.4.1           
+[17] progress_1.2.2      opalr_1.5.1         httr_1.4.2          knitr_1.29         
+[21] BiocStyle_2.16.0   
 
 loaded via a namespace (and not attached):
  [1] fs_1.5.0            lubridate_1.7.9     RColorBrewer_1.1-2  numDeriv_2016.8-1.1
  [5] tools_4.0.2         backports_1.1.9     utf8_1.1.4          DBI_1.1.0          
  [9] colorspace_1.4-1    sn_1.6-2            withr_2.2.0         tidyselect_1.1.0   
 [13] prettyunits_1.1.1   mnormt_2.0.2        curl_4.3            compiler_4.0.2     
-[17] rvest_0.3.6         cli_2.0.2           xml2_1.3.2          TFisher_0.2.0      
-[21] sandwich_2.5-1      labeling_0.3        bookdown_0.20       scales_1.1.1       
-[25] mvtnorm_1.1-1       digest_0.6.25       rmarkdown_2.3       pkgconfig_2.0.3    
-[29] htmltools_0.5.0     bibtex_0.4.2.2      plotrix_3.7-8       dbplyr_1.4.4       
-[33] highr_0.8           readxl_1.3.1        rlang_0.4.7         rstudioapi_0.11    
-[37] generics_0.0.2      farver_2.0.3        zoo_1.8-8           jsonlite_1.7.0     
-[41] magrittr_1.5        Matrix_1.2-18       Rcpp_1.0.5          munsell_0.5.0      
-[45] fansi_0.4.1         lifecycle_0.2.0     stringi_1.4.6       multcomp_1.4-13    
-[49] yaml_2.2.1          mathjaxr_1.0-1      gbRd_0.4-11         MASS_7.3-52        
-[53] grid_4.0.2          blob_1.2.1          ggrepel_0.8.2       crayon_1.3.4       
-[57] lattice_0.20-41     haven_2.3.1         splines_4.0.2       multtest_2.44.0    
-[61] hms_0.5.3           magick_2.4.0        tmvnsim_1.0-2       pillar_1.4.6       
-[65] codetools_0.2-16    stats4_4.0.2        reprex_0.3.0        mutoss_0.1-12      
-[69] glue_1.4.2          evaluate_0.14       metap_1.4           modelr_0.1.8       
-[73] BiocManager_1.30.10 vctrs_0.3.3         Rdpack_1.0.0        cellranger_1.1.0   
-[77] gtable_0.3.0        assertthat_0.2.1    xfun_0.16           mime_0.9           
-[81] broom_0.7.0         rsconnect_0.8.16    survival_3.2-3      TH.data_1.0-10     
-[85] ellipsis_0.3.1     </code></pre>
+[17] cli_2.0.2           rvest_0.3.6         xml2_1.3.2          TFisher_0.2.0      
+[21] sandwich_2.5-1      bookdown_0.20       scales_1.1.1        mvtnorm_1.1-1      
+[25] digest_0.6.25       rmarkdown_2.3       pkgconfig_2.0.3     htmltools_0.5.0    
+[29] bibtex_0.4.2.2      plotrix_3.7-8       highr_0.8           dbplyr_1.4.4       
+[33] rlang_0.4.7         readxl_1.3.1        rstudioapi_0.11     generics_0.0.2     
+[37] zoo_1.8-8           jsonlite_1.7.0      magrittr_1.5        Matrix_1.2-18      
+[41] fansi_0.4.1         Rcpp_1.0.5          munsell_0.5.0       lifecycle_0.2.0    
+[45] stringi_1.4.6       multcomp_1.4-13     yaml_2.2.1          mathjaxr_1.0-1     
+[49] gbRd_0.4-11         MASS_7.3-52         grid_4.0.2          blob_1.2.1         
+[53] ggrepel_0.8.2       crayon_1.3.4        lattice_0.20-41     haven_2.3.1        
+[57] splines_4.0.2       multtest_2.44.0     hms_0.5.3           tmvnsim_1.0-2      
+[61] pillar_1.4.6        codetools_0.2-16    stats4_4.0.2        reprex_0.3.0       
+[65] mutoss_0.1-12       glue_1.4.2          evaluate_0.14       metap_1.4          
+[69] BiocManager_1.30.10 modelr_0.1.8        vctrs_0.3.3         Rdpack_1.0.0       
+[73] cellranger_1.1.0    gtable_0.3.0        assertthat_0.2.1    xfun_0.16          
+[77] mime_0.9            broom_0.7.0         survival_3.2-3      TH.data_1.0-10     
+[81] ellipsis_0.3.1     </code></pre>
 </div>
 
 
